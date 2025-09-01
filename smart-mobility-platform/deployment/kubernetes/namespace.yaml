@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: smart-mobility
+  labels:
+    name: smart-mobility
+    environment: production

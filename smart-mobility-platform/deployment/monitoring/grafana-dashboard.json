@@ -1,0 +1,222 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "Smart Mobility Platform Dashboard",
+    "tags": ["mobility", "transport", "ai"],
+    "style": "dark",
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "System Overview",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "up{job=\"api-backend\"}",
+            "legendFormat": "API Backend Status"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "steps": [
+                {"color": "red", "value": 0},
+                {"color": "green", "value": 1}
+              ]
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}
+      },
+      {
+        "id": 2,
+        "title": "API Response Time",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{job=\"api-backend\"}[5m])) by (le))",
+            "legendFormat": "95th percentile"
+          },
+          {
+            "expr": "histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket{job=\"api-backend\"}[5m])) by (le))",
+            "legendFormat": "50th percentile"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Response Time (s)",
+            "min": 0
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}
+      },
+      {
+        "id": 3,
+        "title": "Request Rate",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "sum(rate(http_requests_total{job=\"api-backend\"}[5m]))",
+            "legendFormat": "Requests/sec"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Requests/sec",
+            "min": 0
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}
+      },
+      {
+        "id": 4,
+        "title": "Error Rate",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "sum(rate(http_requests_total{job=\"api-backend\",status=~\"4..|5..\"}[5m])) / sum(rate(http_requests_total{job=\"api-backend\"}[5m])) * 100",
+            "legendFormat": "Error Rate %"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Error Rate (%)",
+            "min": 0,
+            "max": 100
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}
+      },
+      {
+        "id": 5,
+        "title": "Database Connections",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "pg_stat_database_numbackends{datname=\"mobility_platform\"}",
+            "legendFormat": "Active Connections"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Connections",
+            "min": 0
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16}
+      },
+      {
+        "id": 6,
+        "title": "Redis Memory Usage",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "redis_memory_used_bytes / redis_memory_max_bytes * 100",
+            "legendFormat": "Memory Usage %"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Memory Usage (%)",
+            "min": 0,
+            "max": 100
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16}
+      },
+      {
+        "id": 7,
+        "title": "ML Model Performance",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "ml_model_accuracy{model_type=\"demand_prediction\"}",
+            "legendFormat": "Demand Prediction Accuracy"
+          },
+          {
+            "expr": "ml_model_accuracy{model_type=\"congestion_prediction\"}",
+            "legendFormat": "Congestion Prediction Accuracy"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Accuracy",
+            "min": 0,
+            "max": 1
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 24}
+      },
+      {
+        "id": 8,
+        "title": "Prediction Latency",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "ml_prediction_duration_seconds{model_type=\"demand_prediction\"}",
+            "legendFormat": "Demand Prediction"
+          },
+          {
+            "expr": "ml_prediction_duration_seconds{model_type=\"congestion_prediction\"}",
+            "legendFormat": "Congestion Prediction"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Latency (s)",
+            "min": 0
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 24}
+      },
+      {
+        "id": 9,
+        "title": "Anomaly Detection",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "anomalies_detected_total",
+            "legendFormat": "Total Anomalies Detected"
+          },
+          {
+            "expr": "rate(anomalies_detected_total[1h]) * 3600",
+            "legendFormat": "Anomalies per Hour"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Count",
+            "min": 0
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 32}
+      },
+      {
+        "id": 10,
+        "title": "System Resource Usage",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(container_cpu_usage_seconds_total{namespace=\"smart-mobility\"}[5m]) * 100",
+            "legendFormat": "CPU Usage % - {{pod}}"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "CPU Usage (%)",
+            "min": 0
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 32}
+      }
+    ],
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "refresh": "30s"
+  }
+}
