@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mobility-config
+  namespace: smart-mobility
+data:
+  # Database configuration
+  DB_HOST: "postgres-service"
+  DB_PORT: "5432"
+  DB_NAME: "mobility_platform"
+  
+  # Redis configuration
+  REDIS_HOST: "redis-service"
+  REDIS_PORT: "6379"
+  
+  # Kafka configuration
+  KAFKA_BOOTSTRAP_SERVERS: "kafka-service:9092"
+  KAFKA_GROUP_ID: "mobility-platform-consumer"
+  
+  # MQTT configuration
+  MQTT_BROKER: "mqtt-service"
+  MQTT_PORT: "1883"
+  
+  # API configuration
+  API_BASE_URL: "http://api-backend-service:8000"
+  
+  # Spark configuration
+  SPARK_MASTER_URL: "spark://spark-master-service:7077"
+  
+  # Model paths
+  MODEL_PATH: "/app/models"
+  
+  # Logging configuration
+  LOG_LEVEL: "INFO"
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mobility-secrets
+  namespace: smart-mobility
+type: Opaque
+stringData:
+  # Database credentials
+  DB_USER: "mobility_user"
+  DB_PASSWORD: "mobility_pass_secure_123"
+  
+  # OpenAI API key (if using)
+  OPENAI_API_KEY: "your-openai-api-key-here"
+  
+  # JWT secret
+  JWT_SECRET: "your-jwt-secret-key-here"
+  
+  # Redis password (if needed)
+  REDIS_PASSWORD: ""
