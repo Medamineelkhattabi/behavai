@@ -130,7 +130,7 @@ kubectl apply -f deployment/kubernetes/ingress.yaml
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
 │   Data Sources  │    │  Data Ingestion  │    │   Processing    │
 │                 │    │                  │    │                 │
-│ • GPS Data      │───▶│ • Kafka/MQTT     │───▶│ • Apache Spark  │
+│ • GPS Data      │───▶│ • Kafka/MQTT     │──▶│ • Apache Spark  │
 │ • AIS Data      │    │ • Real-time      │    │ • Feature Eng.  │
 │ • Sensor Data   │    │ • Batch ETL      │    │ • Data Quality  │
 │ • Ticketing     │    │                  │    │                 │
@@ -140,7 +140,7 @@ kubectl apply -f deployment/kubernetes/ingress.yaml
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
 │   Frontend      │    │   API Backend    │    │   AI/ML Models  │
 │                 │    │                  │    │                 │
-│ • Dashboard     │◀───│ • FastAPI        │◀───│ • LSTM/GNN      │
+│ • Dashboard     │◀───│ • FastAPI        │◀──│ • LSTM/GNN      │
 │ • Visualizations│    │ • Authentication │    │ • Anomaly Det.  │
 │ • AI Assistant  │    │ • WebSocket      │    │ • RL Optimizer  │
 │                 │    │                  │    │ • RAG System    │
@@ -335,13 +335,6 @@ python -m ai-models.validation.model_validator
 - API rate limiting and DDoS protection
 - Regular security scanning and updates
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
 
 ### Development Guidelines
 - Follow PEP 8 style guidelines
